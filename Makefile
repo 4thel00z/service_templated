@@ -34,10 +34,10 @@ build-win: dep ## Build the binary file
 	@env CGO_ENABLED=0 GOARCH=386 GOOS=windows go build -o build/service_templated.exe cmd/service_templated/main.go
 
 run: build
-	@build/service_template $(ARGS)
+	@build/service_templated $(ARGS)
 
 clean: ## Remove previous build
-	@rm -f $(PROJECT_NAME)
+	@rm -f build/*
 
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
