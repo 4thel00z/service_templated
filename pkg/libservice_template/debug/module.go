@@ -35,3 +35,7 @@ func (Y Debug) HandlerById(i int) libservice_template.Service {
 	// This makes the server return a 404 by default
 	return nil
 }
+
+func (Y Debug) LongPath(route libservice_template.Route) string {
+	return libservice_template.DefaultLongPath(Y, route)
+}

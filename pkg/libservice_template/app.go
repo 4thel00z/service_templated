@@ -12,22 +12,26 @@ type App struct {
 	Addr    string   `json:"addr"`
 	Config  Config   `json:"config"`
 	Modules []Module `json:"modules"`
-	Debug   bool
 	Router  *typhon.Router
+	Debug   bool
+	Verbose bool
 }
 
 func NewApp(addr string, config Config, verbose, debug bool, modules ...Module) App {
+
 	app := App{
 		Addr:    addr,
 		Config:  config,
 		Modules: modules,
 		Debug:   debug,
+		Verbose: verbose,
 	}
+
 	router := &typhon.Router{}
 
 	for _, module := range modules {
 		for i, route := range module.Routes() {
-			path := generatePath(module, route)
+			path := module.LongPath(route)
 			handler := module.HandlerById(i)
 			if handler == nil {
 				handler = Default404Handler
@@ -55,9 +59,9 @@ func (app App) Routes() []Route {
 			route.CurlExample = strings.ReplaceAll(route.CurlExample, "<namespace>", namespace)
 			route.CurlExample = strings.ReplaceAll(route.CurlExample, "<path>", route.Path)
 			if app.Debug {
-				// Add modulewise injections of f.e. the <auth> tag
+				// Add module wise injections of f.e. the <auth> tag
 			}
-			route.longPath = generatePath(module, route)
+			route.longPath = module.LongPath(route)
 			routes = append(routes, route)
 
 		}
@@ -78,7 +82,7 @@ func (app App) PrintRoutes(addr string) {
 
 func (app App) Register(module Module) {
 	for i, route := range module.Routes() {
-		path := generatePath(module, route)
+		path := module.LongPath(route)
 		handler := module.HandlerById(i)
 		fmt.Println("HANDLER", handler, handler(app))
 		if handler == nil {
@@ -88,10 +92,6 @@ func (app App) Register(module Module) {
 		app.Router.Register(strings.ToUpper(route.Method), path, handler(app))
 	}
 
-}
-
-func generatePath(module Module, route Route) string {
-	return "/" + strings.Join([]string{module.Version(), module.Namespace(), route.Path}, "/")
 }
 
 func (app App) PrintConfig() {
