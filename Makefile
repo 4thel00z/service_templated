@@ -28,10 +28,10 @@ dep: ## Get the dependencies
 	@go mod download
 
 build: dep ## Build the binary file
-	@env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/service_templated main/service_templated.go
+	@env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/service_templated cmd/service_templated/main.go
 
 build-win: dep ## Build the binary file
-	@env CGO_ENABLED=0 GOARCH=386 GOOS=windows go build -o build/service_templated.exe main/service_templated.go
+	@env CGO_ENABLED=0 GOARCH=386 GOOS=windows go build -o build/service_templated.exe cmd/service_templated/main.go
 
 run: build
 	@build/service_template $(ARGS)
