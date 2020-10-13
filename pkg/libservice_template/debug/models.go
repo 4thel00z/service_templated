@@ -9,5 +9,5 @@ type GenericResponse struct {
 
 type GetRoutesResponse struct {
 	Routes []libservice_template.Route `json:"routes"`
-	Error  *string         `json:"error,omitempty"`
+	Error  *string                     `json:"error,omitempty"`
 }
