@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"service_templated/pkg/libservice_template"
 	"service_templated/pkg/libservice_template/debug"
+	"service_templated/pkg/libservice_template/filters"
 	"strconv"
 	"syscall"
 	"time"
@@ -48,7 +49,9 @@ func main() {
 
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).
-		Filter(typhon.H2cFilter)
+		Filter(typhon.H2cFilter).
+		Filter(filters.Validation(app))
+
 	srv, err := typhon.Listen(svc, addr)
 	if err != nil {
 		panic(err)
