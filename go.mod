@@ -12,9 +12,9 @@ require (
 	github.com/monzo/slog v0.0.0-20200622142821-ebfbdb7eb55b // indirect
 	github.com/monzo/terrors v0.0.0-20191030112059-325b9ec5dcdf // indirect
 	github.com/monzo/typhon v0.0.0-20200505200851-d565f398c1c5
-	github.com/oov/audio v0.0.0-20171004131523-88a2be6dbe38
 	github.com/stretchr/testify v1.6.1 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	gopkg.in/dealancer/validate.v2 v2.0.0-20191007140827-2f5082b2f7fa
 )
