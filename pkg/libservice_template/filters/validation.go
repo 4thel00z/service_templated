@@ -1,9 +1,14 @@
 package filters
 
 import (
+	"context"
 	"fmt"
 	"github.com/monzo/typhon"
 	"service_templated/pkg/libservice_template"
+)
+
+const (
+	ValidationResult = "validation_result"
 )
 
 func Validation(app libservice_template.App) typhon.Filter {
@@ -18,7 +23,7 @@ func Validation(app libservice_template.App) typhon.Filter {
 				return svc(req)
 			}
 
-			err := (*route.Validator)(req)
+			val, err := (*route.Validator)(req)
 
 			if err != nil {
 				msg := err.Error()
@@ -27,6 +32,9 @@ func Validation(app libservice_template.App) typhon.Filter {
 					Error:   &msg,
 				})
 			}
+
+			req.Context = context.WithValue(req.Context, ValidationResult, val)
+			return svc(req)
 		}
 
 		return svc(req)
