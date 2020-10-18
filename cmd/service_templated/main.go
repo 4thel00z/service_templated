@@ -50,7 +50,8 @@ func main() {
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).
 		Filter(typhon.H2cFilter).
-		Filter(filters.Validation(app))
+		Filter(filters.Validation(app)).
+		Filter(filters.Auth(app))
 
 	srv, err := typhon.Listen(svc, addr)
 	if err != nil {
