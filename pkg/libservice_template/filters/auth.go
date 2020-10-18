@@ -24,7 +24,13 @@ func Auth(app libservice_template.App) typhon.Filter {
 			return svc(req)
 		}
 
-		val, err := (*route.TokenValidator)(req)
+		validator := (*route.TokenValidator).Validator
+
+		if validator == nil {
+			return svc(req)
+		}
+
+		val, err := validator(req)
 
 		if err != nil {
 			msg := err.Error()

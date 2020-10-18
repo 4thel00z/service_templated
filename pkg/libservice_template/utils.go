@@ -18,7 +18,7 @@ func Default404Handler(app App) typhon.Service {
 	}
 }
 
-func GenerateJSONValidator(i interface{}) *Validator {
+func GenerateRequestValidator(i interface{}) *Validator {
 	t := reflect.TypeOf(i)
 	toValidate := reflect.New(t).Interface()
 

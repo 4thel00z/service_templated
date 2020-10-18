@@ -3,6 +3,7 @@ package libservice_template
 import (
 	"encoding/json"
 	"github.com/monzo/typhon"
+	"gopkg.in/dealancer/validate.v2"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -26,16 +27,27 @@ func ParseConfig(path string) (config Config, err error) {
 	if err != nil {
 		return Config{}, err
 	}
+	err = validate.Validate(config)
+	if err != nil {
+		return Config{}, err
+	}
 	return config, nil
 }
 
 type Config struct {
+	EnableAuthOnOptions bool     `json:"enable_auth_on_options"`
+	TokenExtractors     []string `json:"token_extractors" validate:"> 	one_of=headers,params"` // allowed values are "headers" and "params"
+
 	//TODO: add more fields here if you want to make the app more configurable
 }
 
 type Service func(app App) typhon.Service
 type Validator func(request typhon.Request) (interface{}, error)
-type TokenValidator func(request typhon.Request) (interface{}, error)
+
+type TokenValidator struct {
+	Validator Validator
+	Algorithm string
+}
 
 type Route struct {
 	Path           string          `json:"-"`
