@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+var (
+	routes = map[string]Route{}
+)
+
 type App struct {
 	Addr    string   `json:"addr"`
 	Config  Config   `json:"config"`
@@ -30,13 +34,8 @@ func NewApp(addr string, config Config, verbose, debug bool, modules ...Module) 
 	router := &typhon.Router{}
 
 	for _, module := range modules {
-		for i, route := range module.Routes() {
-			path := module.LongPath(route)
-			handler := module.HandlerById(i)
-			if handler == nil {
-				handler = Default404Handler
-			}
-			router.Register(strings.ToUpper(route.Method), path, handler(app))
+		for _, route := range module.Routes() {
+			router.Register(strings.ToUpper(route.Method), module.LongPath(route), route.Service(app))
 		}
 	}
 
@@ -45,8 +44,11 @@ func NewApp(addr string, config Config, verbose, debug bool, modules ...Module) 
 	return app
 }
 
-func (app App) Routes() []Route {
-	var routes []Route
+func (app App) Routes() map[string]Route {
+	if len(routes) > 0 {
+		return routes
+	}
+
 	addr := app.Addr
 
 	for _, module := range app.Modules {
@@ -61,9 +63,8 @@ func (app App) Routes() []Route {
 			if app.Debug {
 				// Add module wise injections of f.e. the <auth> tag
 			}
-			route.LongPath = module.LongPath(route)
-			routes = append(routes, route)
 
+			routes[module.LongPath(route)] = route
 		}
 	}
 	return routes
@@ -73,23 +74,17 @@ func (app App) PrintRoutes(addr string) {
 	if len(routes) > 0 {
 		log.Println("👠\tThe routes 🛣️  are:")
 	}
-	for _, route := range routes {
-		log.Printf("\thttp://%v%s with method: %s", addr, route.LongPath, route.Method)
+	for path, route := range routes {
+		log.Printf("\thttp://%v%s with method: %s", addr, path, route.Method)
 		log.Printf("\tQuery this endpoint like this:\n\t\t%s", route.CurlExample)
 
 	}
 }
 
 func (app App) Register(module Module) {
-	for i, route := range module.Routes() {
-		path := module.LongPath(route)
-		handler := module.HandlerById(i)
-		fmt.Println("HANDLER", handler, handler(app))
-		if handler == nil {
-			handler = Default404Handler
-		}
-		fmt.Println("METHOD", route.Method, "PATH:", path)
-		app.Router.Register(strings.ToUpper(route.Method), path, handler(app))
+	for path, route := range module.Routes() {
+		fmt.Println("HANDLER", path, route.Service)
+		app.Router.Register(strings.ToUpper(route.Method), path, route.Service(app))
 	}
 
 }
