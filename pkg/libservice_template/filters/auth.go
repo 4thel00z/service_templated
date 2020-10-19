@@ -1,14 +1,8 @@
 package filters
 
 import (
-	"context"
-	"fmt"
 	"github.com/monzo/typhon"
 	"service_templated/pkg/libservice_template"
-)
-
-const (
-	AuthResult = "auth_result"
 )
 
 func Auth(app libservice_template.App) typhon.Filter {
@@ -24,24 +18,13 @@ func Auth(app libservice_template.App) typhon.Filter {
 			return svc(req)
 		}
 
-		validator := (*route.TokenValidator).Validator
+		validator := route.TokenValidator
 
 		if validator == nil {
 			return svc(req)
 		}
 
-		val, err := validator(req, svc)
-
-		if err != nil {
-			msg := err.Error()
-			return req.Response(libservice_template.GenericResponse{
-				Message: fmt.Sprintf("[%s] %s validation error", pattern, route.Method),
-				Error:   &msg,
-			})
-		}
-
-		req.Context = context.WithValue(req.Context, AuthResult, val)
-		return svc(req)
+		return validator(req, svc)
 
 	}
 }
