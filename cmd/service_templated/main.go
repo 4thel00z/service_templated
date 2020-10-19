@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/joho/godotenv"
 	"github.com/logrusorgru/aurora"
 	"github.com/monzo/typhon"
 	"log"
@@ -36,6 +37,11 @@ var (
 
 func main() {
 	flag.Parse()
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file. Create an empty .env file if you don't intend to use them")
+	}
 
 	log.Println("\n", aurora.Magenta(banner), "\n")
 	log.Println("👩	Version:", version)
