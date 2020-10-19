@@ -6,4 +6,4 @@ curl --request POST \
   --data grant_type=client_credentials \
   --data "client_id=$OAUTH_CLIENT_ID" \
   --data client_secret=$OAUTH_CLIENT_SECRET \
-  --data audience=YOUR_API_IDENTIFIER
+  --data audience=$OAUTH_AUDIENCE
