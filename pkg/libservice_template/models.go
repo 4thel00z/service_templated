@@ -45,34 +45,15 @@ type Config struct {
 
 type Service func(app App) typhon.Service
 type Validator func(request typhon.Request) (interface{}, error)
-type ValidatorWithService func(request typhon.Request, next typhon.Service) (interface{}, error)
-
-type TokenValidator struct {
-	Validator ValidatorWithService
-	Algorithm string
-}
+type ValidatorWithService typhon.Filter
 
 type Route struct {
-	Path           string          `json:"-"`
-	Method         string          `json:"method"`
-	CurlExample    string          `json:"curl_example"`
-	Validator      *Validator      `json:"-"`
-	TokenValidator *TokenValidator `json:"-"`
-	Service        Service         `json:"-"`
-}
-
-func NewRoute(path, method, curlExample string, validator *Validator, tokenValidator *TokenValidator, svc Service) Route {
-	if svc == nil {
-		svc = Default404Handler
-	}
-
-	return Route{
-		Path:           path,
-		Method:         method,
-		CurlExample:    curlExample,
-		Validator:      validator,
-		TokenValidator: tokenValidator,
-	}
+	Path           string               `json:"-"`
+	Method         string               `json:"method"`
+	CurlExample    string               `json:"curl_example"`
+	Validator      *Validator           `json:"-"`
+	TokenValidator ValidatorWithService `json:"-"`
+	Service        Service              `json:"-"`
 }
 
 type Module interface {
