@@ -1,4 +1,4 @@
-package auth
+package jwt
 
 import (
 	"context"
@@ -12,8 +12,8 @@ import (
 	"strings"
 )
 
-type Option func(jwtMiddleware *JWTValidator)
-type JWTValidator struct {
+type Option func(j *Validator)
+type Validator struct {
 
 	// If you are too lazy to scope check in your request handlers, you can do it here
 	ScopeChecker ScopeChecker
@@ -24,7 +24,7 @@ type JWTValidator struct {
 
 	// The function that will return the Key to validate the JWT.
 	// It can be either a shared secret or a public key.
-	// Default value: nil
+	// Default value: ValidationKeyGetterFromEnv()
 	ValidationKeyGetter jwt.Keyfunc
 
 	// The name of the property in the request where the user information
@@ -64,74 +64,86 @@ type JWTValidator struct {
 }
 
 func WithScopeChecker(s ScopeChecker) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.ScopeChecker = s
 	}
 }
 
+func WithEnvScopeChecker(scope string) Option {
+	return func(j *Validator) {
+		j.ScopeChecker = CheckOAuthScopeFromEnv(scope)
+	}
+}
+
 func WithScopeCheckErrorHandler(e ErrorHandler) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.ScopeCheckErrorHandler = e
 	}
 }
 
 func WithValidationKeyGetter(getter jwt.Keyfunc) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.ValidationKeyGetter = getter
+	}
+}
+func WithEnvValidationKeyGetter() Option {
+	return func(j *Validator) {
+		j.ValidationKeyGetter = ValidationKeyGetterFromEnv()
 	}
 }
 
 func WithUserProperty(u string) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.UserProperty = u
 	}
 }
 
-func WithDebug(d bool) Option {
-	return func(j *JWTValidator) {
-		j.Debug = d
+func WithDebug() Option {
+	return func(j *Validator) {
+		j.Debug = true
 	}
 }
 
 func WithSigningMethod(s jwt.SigningMethod) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.SigningMethod = s
 	}
 }
 
 func WithTokenExtractors(extractors ...TokenExtractor) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.Extractor = FromFirst(extractors...)
 	}
 }
 
 func WithTokenExtractor(extractor TokenExtractor) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.Extractor = extractor
 	}
 }
 
 func WithEmptyTokenHandler(e EmptyTokenHandler) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.EmptyTokenHandler = e
 	}
 }
 
 func WithCredentialsOptional(o bool) Option {
-	return func(j *JWTValidator) {
+	return func(j *Validator) {
 		j.CredentialsOptional = o
 	}
 }
 
 // New constructs a new Secure instance with supplied 
-func New(options ...Option) *JWTValidator {
+func New(options ...Option) *Validator {
 
-	j := &JWTValidator{
-		UserProperty:           "user",
+	j := &Validator{
+		UserProperty:           DefaultUserProperty,
 		ErrorHandler:           OnError,
 		Extractor:              FromAuthHeader,
 		ScopeCheckErrorHandler: OnScopeInsufficient,
 		SigningMethod:          jwt.SigningMethodRS256,
+		ValidationKeyGetter:    ValidationKeyGetterFromEnv(),
 	}
 
 	for _, option := range options {
@@ -141,7 +153,7 @@ func New(options ...Option) *JWTValidator {
 	return j
 }
 
-func (j *JWTValidator) Middleware(r typhon.Request, service typhon.Service) typhon.Response {
+func (j *Validator) Middleware(r typhon.Request, service typhon.Service) typhon.Response {
 	if !j.EnableAuthOnOptions {
 		if r.Method == "OPTIONS" {
 			return service(r)
@@ -184,8 +196,8 @@ func (j *JWTValidator) Middleware(r typhon.Request, service typhon.Service) typh
 
 	// Check if there was an error in parsing...
 	if err != nil {
-		j.logf("Error parsing token: %v", err)
-		return j.ErrorHandler(r, fmt.Sprintf("Error parsing token: %e", err))
+		j.logf("Error parsing token:%s", err.Error())
+		return j.ErrorHandler(r, fmt.Sprintf("Error parsing token: %s", err.Error()))
 
 	}
 
@@ -217,7 +229,7 @@ func (j *JWTValidator) Middleware(r typhon.Request, service typhon.Service) typh
 	return service(r)
 }
 
-func (j *JWTValidator) logf(format string, args ...interface{}) {
+func (j *Validator) logf(format string, args ...interface{}) {
 	if j.Debug {
 		log.Printf(format, args...)
 	}

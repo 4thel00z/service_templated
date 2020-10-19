@@ -1,4 +1,4 @@
-package auth
+package jwt
 
 import (
 	"encoding/json"
@@ -13,6 +13,7 @@ const (
 	OAuthAudienceEnvKey = "OAUTH_AUDIENCE"
 	OAuthIssuerEnvKey   = "OAUTH_ISSUER"
 	OAuthJWKSUrlEnvKey  = "OAUTH_JWKS_URL"
+	DefaultUserProperty ="user"
 )
 
 func CheckOAuthScope(jwksUrl, scope string) func(tokenString string) bool {
@@ -45,7 +46,7 @@ func CheckOAuthScope(jwksUrl, scope string) func(tokenString string) bool {
 func CheckOAuthScopeFromEnv(scope string) func(tokenString string) bool {
 	return func(tokenString string) bool {
 		token, _ := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-			cert, err := getPemCert(os.ExpandEnv(OAuthAudienceEnvKey), token)
+			cert, err := getPemCert(os.Getenv(OAuthAudienceEnvKey), token)
 			if err != nil {
 				return nil, err
 			}
@@ -74,17 +75,17 @@ func ValidationKeyGetterFromEnv() jwt.Keyfunc {
 			return nil, errors.New("(token *jwt.Token) is nil inside of the ValidationKeyGetter")
 		}
 
-		checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(os.ExpandEnv(OAuthAudienceEnvKey), false)
+		checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(os.Getenv(OAuthAudienceEnvKey), false)
 		if !checkAud {
 			return token, errors.New("invalid audience")
 		}
 
-		checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(os.ExpandEnv(OAuthIssuerEnvKey), false)
+		checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(os.Getenv(OAuthIssuerEnvKey), false)
 		if !checkIss {
 			return token, errors.New("invalid issuer")
 		}
 
-		cert, err := getPemCert(os.ExpandEnv(OAuthJWKSUrlEnvKey), token)
+		cert, err := getPemCert(os.Getenv(OAuthJWKSUrlEnvKey), token)
 		if err != nil {
 			return nil, err
 		}
