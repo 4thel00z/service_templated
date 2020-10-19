@@ -30,7 +30,7 @@ func Auth(app libservice_template.App) typhon.Filter {
 			return svc(req)
 		}
 
-		val, err := validator(req)
+		val, err := validator(req, svc)
 
 		if err != nil {
 			msg := err.Error()

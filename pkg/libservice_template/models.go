@@ -35,17 +35,20 @@ func ParseConfig(path string) (config Config, err error) {
 }
 
 type Config struct {
-	EnableAuthOnOptions bool     `json:"enable_auth_on_options"`
-	TokenExtractors     []string `json:"token_extractors" validate:"> 	one_of=headers,params"` // allowed values are "headers" and "params"
-
+	EnableAuthOnOptions    bool     `json:"enable_auth_on_options"`
+	TokenExtractors        []string `json:"token_extractors" validate:"> 	one_of=headers,params"` // allowed values are "headers" and "params"
+	OAuthJsonWebKeySetsUrl string   `json:"oauth_json_web_key_sets_url"`
+	OAuthIssuer            string   `json:"oauth_issuer"`
+	OAuthAudience          string   `json:"oauth_audience"`
 	//TODO: add more fields here if you want to make the app more configurable
 }
 
 type Service func(app App) typhon.Service
 type Validator func(request typhon.Request) (interface{}, error)
+type ValidatorWithService func(request typhon.Request, next typhon.Service) (interface{}, error)
 
 type TokenValidator struct {
-	Validator Validator
+	Validator ValidatorWithService
 	Algorithm string
 }
 
