@@ -1,5 +1,7 @@
 # ```service_templated```
 
+![service_templated-tests](https://github.com/4thel00z/service_templated/workflows/Test/badge.svg)
+
 ## What this project is about
 
 This is [my](https://github.com/4thel00z) go http service template.
