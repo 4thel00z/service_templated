@@ -18,6 +18,22 @@ To create a new project simply invoke this script:
 curl  --proto '=https' --tlsv1.2 -L -sSf https://shortly.fun/boilerplate | bash -s <project_name>
 ```
 
+## How do I run it ?
+
+After creating a new project like above you can simply run:
+
+```
+make run
+```
+
+or
+
+```
+just run
+```
+
+if you have [just](https://github.com/casey/just) installed.
+
 ## License
 
 This project is licensed under the GPL-3 license.
