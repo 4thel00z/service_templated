@@ -14,7 +14,7 @@ It sports features like:
 
 ## How do I install it ?
 
-To create a new project simply invoke this script:
+To create a new project simply invoke this script, (make sure to use your own project name instead of `<project_name>` lol):
 
 ```
 curl  --proto '=https' --tlsv1.2 -L -sSf https://shortly.fun/boilerplate | bash -s <project_name>
