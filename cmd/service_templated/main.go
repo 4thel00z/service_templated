@@ -43,8 +43,8 @@ func main() {
 		log.Fatal("Error loading .env file. Create an empty .env file if you don't intend to use them")
 	}
 
-	log.Println("\n", aurora.Magenta(banner), "\n")
-	log.Println("👩	Version:", version)
+	log.Println("\n", aurora.Magenta(banner))
+	log.Println("\n", "👩	Version:", version)
 
 	config, err := libservice_template.ParseConfig(*configPath)
 	if err != nil {
