@@ -6,6 +6,9 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 
 all: build
 
+ensure_env:
+	@touch .env
+
 lint: ## Lint the files
 	@golint -set_exit_status ${PKG_LIST}
 
@@ -27,7 +30,7 @@ coverhtml: ## Generate global code coverage report in HTML
 dep: ## Get the dependencies
 	@go mod download
 
-build: dep ## Build the binary file
+build: dep ensure_env ## Build the binary file
 	@env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/service_templated cmd/service_templated/main.go
 
 build-win: dep ## Build the binary file

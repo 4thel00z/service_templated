@@ -3,6 +3,9 @@ default:
 
 all: build
 
+ensure_env:
+	@touch .env
+
 lint: ## Lint the files
 	@golint -set_exit_status env_var("PKG_LIST")
 
