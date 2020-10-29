@@ -1,17 +1,23 @@
 # ```service_templated```
 
-## TOC
-
-* What this project is about
-* How do I install it ?
-* Architecture
-* Contribution guide
-
 ## What this project is about
+
+This is [my](https://github.com/4thel00z) go http service template.
+It sports features like:
+
+- validation support (see debug module for example)
+- jwt validation support
+- module support (see debug module for example)
+
 
 ## How do I install it ?
 
-## Architecture
+To create a new project simply invoke this script:
 
-## Contribution guide
+```
+curl  --proto '=https' --tlsv1.2 -L -sSf https://shortly.fun/boilerplate | bash -s <project_name>
+```
 
+## License
+
+This project is licensed under the GPL-3 license.
