@@ -33,6 +33,7 @@ just run
 ```
 
 if you have [just](https://github.com/casey/just) installed.
+Running `make help` will show you the rest of the targets.
 
 ## License
 
