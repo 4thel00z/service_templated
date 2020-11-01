@@ -1,8 +1,19 @@
-on: [push, pull_request]
-name: Linter
+name: golangci-lint
+on:
+  push:
+    tags:
+      - *
+    branches:
+      - master
+  pull_request:
 jobs:
-  linter:
-    runs-on: [ubuntu-20.04]
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
     steps:
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v1.2.1
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.29
