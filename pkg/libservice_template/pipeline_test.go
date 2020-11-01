@@ -1,7 +1,10 @@
+// +build linux
+
 package libservice_template
 
 import (
 	"fmt"
+	"go/build"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,6 +14,18 @@ import (
 )
 
 func TestLoadPipeline(t *testing.T) {
+	r := build.Default.ReleaseTags
+	if len(r) < 2 {
+		fmt.Println(r, "len <2!")
+		t.SkipNow()
+	}
+	version := r[1]
+
+	if version != "1.5" {
+		fmt.Println("version != 1.5, skipped")
+		t.SkipNow()
+
+	}
 	env, err := GetGoEnv()
 	assert.Nil(t, err)
 	modPath, found := env["GOMOD"]
