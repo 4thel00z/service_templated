@@ -1,10 +1,8 @@
 package libservice_template
 
 import (
-	"fmt"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestGetGoEnv(t *testing.T) {
