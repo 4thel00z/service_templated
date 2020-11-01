@@ -1,2 +1,7 @@
-- name: Run golangci-lint
-  uses: golangci/golangci-lint-action@v1.2.1
+on: [push, pull_request]
+name: Linter
+jobs:
+  linter:
+    steps:
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v1.2.1
