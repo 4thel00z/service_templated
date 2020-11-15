@@ -3,14 +3,23 @@ package libservice_template
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/iancoleman/strcase"
+	"github.com/mitchellh/mapstructure"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"strings"
 
 	"github.com/monzo/typhon"
 	"gopkg.in/dealancer/validate.v2"
+)
+
+const (
+	multipartTag = "multipart"
 )
 
 func Default404Handler(app App) typhon.Service {
@@ -22,7 +31,7 @@ func Default404Handler(app App) typhon.Service {
 	}
 }
 
-func GenerateRequestValidator(i interface{}) *Validator {
+func GenerateJSONValidator(i interface{}) *Validator {
 	t := reflect.TypeOf(i)
 	toValidate := reflect.New(t).Interface()
 
@@ -42,6 +51,64 @@ func GenerateRequestValidator(i interface{}) *Validator {
 			return nil, err
 		}
 
+		err = validate.Validate(toValidate)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return toValidate, nil
+	}
+
+	return (*Validator)(&validator)
+}
+
+func getMultipartTags(t reflect.Type) map[string]bool {
+	required := map[string]bool{}
+	// Iterate over struct fields
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		key := field.Tag.Get("mapstructure")
+		if key == "" {
+			key = strcase.ToSnake(field.Name)
+		}
+		val := strings.Trim(strings.ToLower(field.Tag.Get(multipartTag)), " ")
+		required[key] = val == "required"
+	}
+	return required
+}
+func GenerateMultipartValidator(i interface{}, maxMemoryBytes int64) *Validator {
+	t := reflect.TypeOf(i)
+	toValidate := reflect.New(t).Interface()
+
+	validator := func(r typhon.Request) (interface{}, error) {
+		err := r.ParseMultipartForm(maxMemoryBytes)
+		fmt.Printf("%v", r.PostForm)
+
+		if err != nil {
+			return nil, err
+		}
+		tags := getMultipartTags(t)
+
+		contents := map[string][]byte{}
+
+		for tag, required := range tags {
+
+			file, _, err := r.FormFile(tag)
+			if err != nil && required {
+				return nil, errors.New(fmt.Sprintf("you need to set %s", tag))
+			}
+			defer file.Close()
+			content, err := ioutil.ReadAll(file)
+			if err != nil && required {
+				return nil, err
+			}
+			contents[tag] = content
+		}
+		err = mapstructure.Decode(contents, &toValidate)
+		if err != nil {
+			return nil, err
+		}
 		err = validate.Validate(toValidate)
 
 		if err != nil {
