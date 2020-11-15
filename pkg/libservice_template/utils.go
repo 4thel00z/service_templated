@@ -83,7 +83,6 @@ func GenerateMultipartValidator(i interface{}, maxMemoryBytes int64) *Validator 
 
 	validator := func(r typhon.Request) (interface{}, error) {
 		err := r.ParseMultipartForm(maxMemoryBytes)
-		fmt.Printf("%v", r.PostForm)
 
 		if err != nil {
 			return nil, err
