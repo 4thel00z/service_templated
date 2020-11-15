@@ -48,12 +48,13 @@ type Validator func(request typhon.Request) (interface{}, error)
 type ValidatorWithService typhon.Filter
 
 type Route struct {
-	Path           string               `json:"-"`
-	Method         string               `json:"method"`
-	CurlExample    string               `json:"curl_example"`
-	Validator      *Validator           `json:"-"`
-	TokenValidator ValidatorWithService `json:"-"`
-	Service        Service              `json:"-"`
+	Path               string               `json:"-"`
+	Method             string               `json:"method"`
+	CurlExample        string               `json:"curl_example"`
+	Validator          *Validator           `json:"-"`
+	MultiPartValidator *Validator           `json:"-"`
+	TokenValidator     ValidatorWithService `json:"-"`
+	Service            Service              `json:"-"`
 }
 
 type Module interface {
