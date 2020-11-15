@@ -2,7 +2,6 @@ package debug
 
 import (
 	"service_templated/pkg/libservice_template"
-	"service_templated/pkg/libservice_template/jwt"
 )
 
 type Debug struct{}
@@ -27,15 +26,6 @@ func (d Debug) Routes() map[string]libservice_template.Route {
 			Method:      "GET",
 			CurlExample: "curl http://<addr>/<version>/<namespace>/<path>",
 			Service:     GetRoutesHandler,
-		},
-		"private": {
-			Path:        "private",
-			Method:      "GET",
-			CurlExample: "curl http://<addr>/<version>/<namespace>/<path>",
-			Service:     GetPrivateMessageHandler,
-			TokenValidator: jwt.New(
-				jwt.WithDebug(),
-			).Middleware,
 		},
 	}
 }
