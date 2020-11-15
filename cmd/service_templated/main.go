@@ -54,6 +54,7 @@ func main() {
 		Filter(typhon.ErrorFilter).
 		Filter(typhon.H2cFilter).
 		Filter(filters.Validation(app)).
+		Filter(filters.MultipartValidation(app)).
 		Filter(filters.Auth(app))
 
 	srv, err := typhon.Listen(svc, addr)
