@@ -12,6 +12,7 @@ import (
 	"service_templated/pkg/libservice_template"
 	"service_templated/pkg/libservice_template/filters"
 	"service_templated/pkg/libservice_template/modules/debug"
+	"service_templated/pkg/libservice_template/modules/examples"
 	"strconv"
 	"syscall"
 	"time"
@@ -48,7 +49,7 @@ func main() {
 		log.Fatalf("could not parse the configuration because of: %s", err.Error())
 	}
 	addr := *host + ":" + strconv.Itoa(*port)
-	app := libservice_template.NewApp(addr, config, *verbose, *debugFlag, debug.Module)
+	app := libservice_template.NewApp(addr, config, *verbose, *debugFlag, debug.Module,examples.Module)
 
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).
