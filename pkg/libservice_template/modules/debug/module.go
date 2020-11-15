@@ -11,27 +11,27 @@ var (
 	Module = Debug{}
 )
 
-func (Y Debug) Version() string {
+func (d Debug) Version() string {
 	return "v1"
 }
 
-func (Y Debug) Namespace() string {
+func (d Debug) Namespace() string {
 	return "debug"
 }
 
-func (Y Debug) Routes() map[string]libservice_template.Route {
+func (d Debug) Routes() map[string]libservice_template.Route {
 	// Add route definitions here
 	return map[string]libservice_template.Route{
 		"routes": {
 			Path:        "routes",
 			Method:      "GET",
-			CurlExample: "curl http://<addr>/<version>/<namespace>/routes",
+			CurlExample: "curl http://<addr>/<version>/<namespace>/<path>",
 			Service:     GetRoutesHandler,
 		},
 		"private": {
 			Path:        "private",
 			Method:      "GET",
-			CurlExample: "curl http://<addr>/<version>/<namespace>/private",
+			CurlExample: "curl http://<addr>/<version>/<namespace>/<path>",
 			Service:     GetPrivateMessageHandler,
 			TokenValidator: jwt.New(
 				jwt.WithDebug(),
@@ -40,6 +40,6 @@ func (Y Debug) Routes() map[string]libservice_template.Route {
 	}
 }
 
-func (Y Debug) LongPath(route libservice_template.Route) string {
-	return libservice_template.DefaultLongPath(Y, route)
+func (d Debug) LongPath(route libservice_template.Route) string {
+	return libservice_template.DefaultLongPath(d, route)
 }
