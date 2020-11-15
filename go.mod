@@ -13,6 +13,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
+	github.com/mitchellh/mapstructure v1.3.3
 	github.com/monzo/slog v0.0.0-20200622142821-ebfbdb7eb55b // indirect
 	github.com/monzo/terrors v0.0.0-20191030112059-325b9ec5dcdf // indirect
 	github.com/monzo/typhon v0.0.0-20200505200851-d565f398c1c5

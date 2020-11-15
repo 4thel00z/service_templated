@@ -49,6 +49,8 @@ github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381 h1:bqDmpDG49ZRn
 github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381/go.mod h1:7rIyQOR62GCctdiQpZ/zOJlFyk6y+94wXzv6RNZgaR4=
 github.com/mattn/go-sqlite3 v1.9.0 h1:pDRiWfl+++eC2FEFRy6jXmQlvp4Yh3z1MJKg4UeYM/4=
 github.com/mattn/go-sqlite3 v1.9.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
+github.com/mitchellh/mapstructure v1.3.3 h1:SzB1nHZ2Xi+17FP0zVQBHIZqvwRN9408fJO8h+eeNA8=
+github.com/mitchellh/mapstructure v1.3.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/monzo/slog v0.0.0-20200622142821-ebfbdb7eb55b h1:hUG1uKs6YjpLg6bnW9tsywQGojBDjv3pqTRUQVd+CEQ=
 github.com/monzo/slog v0.0.0-20200622142821-ebfbdb7eb55b/go.mod h1:WLNpEHhXIwQynoqjGY9HxPbseatrTIBTbG1Rij/oCXY=
 github.com/monzo/terrors v0.0.0-20191030112059-325b9ec5dcdf h1:bc56AoaESXUcGSkXQwIN5FZwNl+lYr5RWawqzyjCank=
