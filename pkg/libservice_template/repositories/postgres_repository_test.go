@@ -9,6 +9,7 @@ import (
 	"testing"
 )
 
+// This is just an example entity, and shows you how you would create one yourself
 type Mango struct {
 	*l.DefaultEntity
 	Color string `name:"color" sql:"VARCHAR(32)"`
