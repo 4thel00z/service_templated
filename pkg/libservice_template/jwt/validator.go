@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/4thel00z/libhttp"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/monzo/typhon"
+
+	libservice "github.com/4thel00z/libservice/v1"
 	"log"
 	"net/http"
-	"service_templated/pkg/libservice"
 	"strings"
 )
 
@@ -153,7 +154,7 @@ func New(options ...Option) *Validator {
 	return j
 }
 
-func (j *Validator) Middleware(r typhon.Request, service typhon.Service) typhon.Response {
+func (j *Validator) Middleware(r libhttp.Request, service libhttp.Service) libhttp.Response {
 	if !j.EnableAuthOnOptions {
 		if r.Method == "OPTIONS" {
 			return service(r)
@@ -238,7 +239,7 @@ func (j *Validator) logf(format string, args ...interface{}) {
 // FromFirst returns a function that runs multiple token extractors and takes the
 // first token it finds
 func FromFirst(extractors ...TokenExtractor) TokenExtractor {
-	return func(r typhon.Request) (string, error) {
+	return func(r libhttp.Request) (string, error) {
 		for _, ex := range extractors {
 			token, err := ex(r)
 			if err != nil {
@@ -252,7 +253,7 @@ func FromFirst(extractors ...TokenExtractor) TokenExtractor {
 	}
 }
 
-func OnError(r typhon.Request, errMsg string) typhon.Response {
+func OnError(r libhttp.Request, errMsg string) libhttp.Response {
 	response := r.Response(libservice.GenericResponse{
 		Message: nil,
 		Error:   &errMsg,
@@ -261,7 +262,7 @@ func OnError(r typhon.Request, errMsg string) typhon.Response {
 	response.StatusCode = http.StatusUnauthorized
 	return response
 }
-func OnScopeInsufficient(r typhon.Request, errMsg string) typhon.Response {
+func OnScopeInsufficient(r libhttp.Request, errMsg string) libhttp.Response {
 	response := r.Response(libservice.GenericResponse{
 		Message: nil,
 		Error:   &errMsg,
@@ -271,7 +272,7 @@ func OnScopeInsufficient(r typhon.Request, errMsg string) typhon.Response {
 	return response
 }
 
-func FromAuthHeader(r typhon.Request) (string, error) {
+func FromAuthHeader(r libhttp.Request) (string, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
 		return "", nil // No error, just no token
@@ -289,7 +290,7 @@ func FromAuthHeader(r typhon.Request) (string, error) {
 // TokenExtractorFromParameter returns a TokenExtractor that extracts the token from the specified
 // query string parameter
 func TokenExtractorFromParameter(param string) TokenExtractor {
-	return func(r typhon.Request) (string, error) {
+	return func(r libhttp.Request) (string, error) {
 		return r.URL.Query().Get(param), nil
 	}
 }

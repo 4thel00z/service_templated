@@ -1,8 +1,8 @@
 package jwt
 
 import (
+	"github.com/4thel00z/libhttp"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/monzo/typhon"
 )
 
 type Jwks struct {
@@ -23,7 +23,7 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-type TokenExtractor func(r typhon.Request) (string, error)
-type ErrorHandler func(r typhon.Request, errMsg string) typhon.Response
-type EmptyTokenHandler typhon.Service
+type TokenExtractor func(r libhttp.Request) (string, error)
+type ErrorHandler func(r libhttp.Request, errMsg string) libhttp.Response
+type EmptyTokenHandler libhttp.Service
 type ScopeChecker func(tokenString string) bool

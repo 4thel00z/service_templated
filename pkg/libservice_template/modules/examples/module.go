@@ -1,7 +1,7 @@
 package examples
 
 import (
-	"service_templated/pkg/libservice"
+	libservice "github.com/4thel00z/libservice/v1"
 	"service_templated/pkg/libservice_template/jwt"
 )
 

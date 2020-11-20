@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/4thel00z/libhttp"
 	"github.com/joho/godotenv"
 	"github.com/logrusorgru/aurora"
-	"github.com/monzo/typhon"
+
+	libservice "github.com/4thel00z/libservice/v1"
 	"log"
 	"os"
 	"os/signal"
-	"service_templated/pkg/libservice"
 	"service_templated/pkg/libservice_template/filters"
 	"service_templated/pkg/libservice_template/modules/debug"
 	"strconv"
@@ -51,13 +52,13 @@ func main() {
 	app := libservice.NewApp(addr, config, *verbose, *debugFlag, debug.Module)
 
 	svc := app.Router.Serve().
-		Filter(typhon.ErrorFilter).
-		Filter(typhon.H2cFilter).
+		Filter(libhttp.ErrorFilter).
+		Filter(libhttp.H2cFilter).
 		Filter(filters.Validation(app)).
 		Filter(filters.MultipartValidation(app)).
 		Filter(filters.Auth(app))
 
-	srv, err := typhon.Listen(svc, addr)
+	srv, err := libhttp.Listen(svc, addr)
 	if err != nil {
 		panic(err)
 	}

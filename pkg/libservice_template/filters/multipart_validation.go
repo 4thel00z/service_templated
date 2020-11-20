@@ -3,8 +3,9 @@ package filters
 import (
 	"context"
 	"fmt"
-	"github.com/monzo/typhon"
-	"service_templated/pkg/libservice"
+	"github.com/4thel00z/libhttp"
+
+	libservice "github.com/4thel00z/libservice/v1"
 )
 
 const (
@@ -13,8 +14,8 @@ const (
 
 // TODO: add file and parameter support at the same time, probably by making the tag parsing more complex
 // i.e. add other flags than "required" like "is_file", etc.		 
-func MultipartValidation(app libservice.App) typhon.Filter {
-	return func(req typhon.Request, svc typhon.Service) typhon.Response {
+func MultipartValidation(app libservice.App) libhttp.Filter {
+	return func(req libhttp.Request, svc libhttp.Service) libhttp.Response {
 		pattern := app.Router.Pattern(req)
 		routes := app.Routes()
 		route, ok := routes[pattern]

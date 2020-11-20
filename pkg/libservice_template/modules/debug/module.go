@@ -1,7 +1,7 @@
 package debug
 
 import (
-	"service_templated/pkg/libservice"
+	libservice "github.com/4thel00z/libservice/v1"
 )
 
 type Debug struct{}
