@@ -1,7 +1,7 @@
 # ```service_templated```
 
 ![service_templated-tests](https://github.com/4thel00z/service_templated/workflows/Test/badge.svg)
-![service_templated-logo](https://github.com/4thel00z/service_templated/raw/assets/logo.svg)
+![service_templated-logo](https://github.com/4thel00z/service_templated/raw/assets/logo.png)
 
 ## What this project is about
 
