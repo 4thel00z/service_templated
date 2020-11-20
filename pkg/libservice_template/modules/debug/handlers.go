@@ -2,10 +2,10 @@ package debug
 
 import (
 	"github.com/monzo/typhon"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 )
 
-func GetRoutesHandler(app libservice_template.App) typhon.Service {
+func GetRoutesHandler(app libservice.App) typhon.Service {
 	return func(req typhon.Request) typhon.Response {
 
 		response := req.Response(&GetRoutesResponse{

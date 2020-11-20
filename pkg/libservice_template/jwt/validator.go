@@ -8,7 +8,7 @@ import (
 	"github.com/monzo/typhon"
 	"log"
 	"net/http"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 	"strings"
 )
 
@@ -253,7 +253,7 @@ func FromFirst(extractors ...TokenExtractor) TokenExtractor {
 }
 
 func OnError(r typhon.Request, errMsg string) typhon.Response {
-	response := r.Response(libservice_template.GenericResponse{
+	response := r.Response(libservice.GenericResponse{
 		Message: nil,
 		Error:   &errMsg,
 	})
@@ -262,7 +262,7 @@ func OnError(r typhon.Request, errMsg string) typhon.Response {
 	return response
 }
 func OnScopeInsufficient(r typhon.Request, errMsg string) typhon.Response {
-	response := r.Response(libservice_template.GenericResponse{
+	response := r.Response(libservice.GenericResponse{
 		Message: nil,
 		Error:   &errMsg,
 	})

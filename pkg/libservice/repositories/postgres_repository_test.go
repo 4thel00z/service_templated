@@ -5,13 +5,13 @@ import (
 	_ "github.com/proullon/ramsql/driver"
 	"github.com/stretchr/testify/assert"
 	"reflect"
-	l "service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 	"testing"
 )
 
 // This is just an example entity, and shows you how you would create one yourself
 type Mango struct {
-	*l.DefaultEntity
+	*libservice.DefaultEntity
 	Color string `name:"color" sql:"VARCHAR(32)"`
 }
 
@@ -30,7 +30,7 @@ func (m Mango) Value(key string) (interface{}, error) {
 	case "color":
 		return m.Color, nil
 	}
-	return nil, l.FieldNotFound
+	return nil, libservice.FieldNotFound
 }
 
 func TestSave(t *testing.T) {
@@ -43,7 +43,7 @@ func TestSave(t *testing.T) {
 	}
 	err = repository.CreateTable(mango, true)
 	assert.Nil(t, err)
-	mango.DefaultEntity = &l.DefaultEntity{}
+	mango.DefaultEntity = &libservice.DefaultEntity{}
 	err = repository.Save(mango)
 	assert.Nil(t, err)
 }

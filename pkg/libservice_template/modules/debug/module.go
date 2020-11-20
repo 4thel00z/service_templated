@@ -1,7 +1,7 @@
 package debug
 
 import (
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 )
 
 type Debug struct{}
@@ -18,9 +18,9 @@ func (d Debug) Namespace() string {
 	return "debug"
 }
 
-func (d Debug) Routes() map[string]libservice_template.Route {
+func (d Debug) Routes() map[string]libservice.Route {
 	// Add route definitions here
-	return map[string]libservice_template.Route{
+	return map[string]libservice.Route{
 		"routes": {
 			Path:        "routes",
 			Method:      "GET",
@@ -30,6 +30,6 @@ func (d Debug) Routes() map[string]libservice_template.Route {
 	}
 }
 
-func (d Debug) LongPath(route libservice_template.Route) string {
-	return libservice_template.DefaultLongPath(d, route)
+func (d Debug) LongPath(route libservice.Route) string {
+	return libservice.DefaultLongPath(d, route)
 }

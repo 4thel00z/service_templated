@@ -1,6 +1,6 @@
 // +build linux
 
-package libservice_template
+package libservice
 
 import (
 	"fmt"

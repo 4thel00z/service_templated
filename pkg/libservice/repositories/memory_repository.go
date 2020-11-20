@@ -3,12 +3,12 @@ package repositories
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 )
 
-type MemoryRepository map[uuid.UUID]libservice_template.Entity
+type MemoryRepository map[uuid.UUID]libservice.Entity
 
-func (m MemoryRepository) Save(e libservice_template.Entity) error {
+func (m MemoryRepository) Save(e libservice.Entity) error {
 	e, ok := m[e.Index()]
 	if ok {
 		return fmt.Errorf("could not save %s, since it is already present", e)
@@ -22,7 +22,7 @@ func (m MemoryRepository) Save(e libservice_template.Entity) error {
 	return nil
 }
 
-func (m MemoryRepository) Update(e libservice_template.Entity) error {
+func (m MemoryRepository) Update(e libservice.Entity) error {
 	if e.Index() == [16]byte{0} {
 		return m.Save(e)
 	}
@@ -30,7 +30,7 @@ func (m MemoryRepository) Update(e libservice_template.Entity) error {
 	return nil
 }
 
-func (m MemoryRepository) Get(u uuid.UUID) (libservice_template.Entity, error) {
+func (m MemoryRepository) Get(u uuid.UUID) (libservice.Entity, error) {
 	indexable, ok := m[u]
 	if !ok {
 		return nil, fmt.Errorf("could not find %s", u)
@@ -38,8 +38,8 @@ func (m MemoryRepository) Get(u uuid.UUID) (libservice_template.Entity, error) {
 	return indexable, nil
 }
 
-func (m MemoryRepository) List() []libservice_template.Entity {
-	entities := make([]libservice_template.Entity, len(m))
+func (m MemoryRepository) List() []libservice.Entity {
+	entities := make([]libservice.Entity, len(m))
 	i := 0
 	for _, v := range m {
 		entities[i] = v
@@ -48,7 +48,7 @@ func (m MemoryRepository) List() []libservice_template.Entity {
 	return entities
 }
 
-func (m MemoryRepository) Delete(e libservice_template.Entity) (bool, error) {
+func (m MemoryRepository) Delete(e libservice.Entity) (bool, error) {
 	_, ok := m[e.Index()]
 	delete(m, e.Index())
 	return ok, nil

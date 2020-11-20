@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/monzo/typhon"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 
 // TODO: add file and parameter support at the same time, probably by making the tag parsing more complex
 // i.e. add other flags than "required" like "is_file", etc.		 
-func MultipartValidation(app libservice_template.App) typhon.Filter {
+func MultipartValidation(app libservice.App) typhon.Filter {
 	return func(req typhon.Request, svc typhon.Service) typhon.Response {
 		pattern := app.Router.Pattern(req)
 		routes := app.Routes()
@@ -30,7 +30,7 @@ func MultipartValidation(app libservice_template.App) typhon.Filter {
 
 		if err != nil {
 			msg := err.Error()
-			return req.Response(libservice_template.GenericResponse{
+			return req.Response(libservice.GenericResponse{
 				Message: fmt.Sprintf("[%s] %s validation error", pattern, route.Method),
 				Error:   &msg,
 			})

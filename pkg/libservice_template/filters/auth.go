@@ -2,10 +2,10 @@ package filters
 
 import (
 	"github.com/monzo/typhon"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 )
 
-func Auth(app libservice_template.App) typhon.Filter {
+func Auth(app libservice.App) typhon.Filter {
 	return func(req typhon.Request, svc typhon.Service) typhon.Response {
 		pattern := app.Router.Pattern(req)
 		routes := app.Routes()

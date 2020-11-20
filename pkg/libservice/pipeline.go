@@ -1,4 +1,4 @@
-package libservice_template
+package libservice
 
 import (
 	"errors"

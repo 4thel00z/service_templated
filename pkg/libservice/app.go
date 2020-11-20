@@ -1,4 +1,4 @@
-package libservice_template
+package libservice
 
 import (
 	"fmt"
@@ -13,8 +13,8 @@ var (
 )
 
 type App struct {
-	Addr    string   `json:"addr"`
-	Config  Config   `json:"config"`
+	Addr    string            `json:"addr"`
+	Config  Config            `json:"config"`
 	Modules map[string]Module `json:"modules"`
 	Router  *typhon.Router
 	Debug   bool

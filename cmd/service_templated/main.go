@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 	"service_templated/pkg/libservice_template/filters"
 	"service_templated/pkg/libservice_template/modules/debug"
 	"strconv"
@@ -43,12 +43,12 @@ func main() {
 	log.Println("\n", aurora.Magenta(banner))
 	log.Println("\n", "👩	Version:", version)
 
-	config, err := libservice_template.ParseConfig(*configPath)
+	config, err := libservice.ParseConfig(*configPath)
 	if err != nil {
 		log.Fatalf("could not parse the configuration because of: %s", err.Error())
 	}
 	addr := *host + ":" + strconv.Itoa(*port)
-	app := libservice_template.NewApp(addr, config, *verbose, *debugFlag, debug.Module)
+	app := libservice.NewApp(addr, config, *verbose, *debugFlag, debug.Module)
 
 	svc := app.Router.Serve().
 		Filter(typhon.ErrorFilter).

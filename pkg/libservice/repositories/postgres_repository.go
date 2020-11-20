@@ -6,19 +6,19 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/jmoiron/sqlx"
 	"reflect"
-	l "service_templated/pkg/libservice_template"
+	"service_templated/pkg/libservice"
 	"strings"
 )
 
 var (
-	defaultEntityType = reflect.TypeOf(&l.DefaultEntity{})
+	defaultEntityType = reflect.TypeOf(&libservice.DefaultEntity{})
 )
 
 type PostgresRepository struct {
 	DB *sqlx.DB
 }
 
-func (r *PostgresRepository) CreateTable(e l.Entity, ifNotExist bool) error {
+func (r *PostgresRepository) CreateTable(e libservice.Entity, ifNotExist bool) error {
 	var (
 		template string
 	)
@@ -39,7 +39,7 @@ func (r *PostgresRepository) CreateTable(e l.Entity, ifNotExist bool) error {
 	return err
 }
 
-func (r *PostgresRepository) DropTable(i l.Entity, ifExists bool) error {
+func (r *PostgresRepository) DropTable(i libservice.Entity, ifExists bool) error {
 	panic("implement me")
 }
 
@@ -52,7 +52,7 @@ func (r *PostgresRepository) Open(dataSourceName string) error {
 	return nil
 }
 
-func (r *PostgresRepository) Save(e l.Entity, fields ...string) error {
+func (r *PostgresRepository) Save(e libservice.Entity, fields ...string) error {
 	session, err := r.DB.Beginx()
 	if err != nil {
 		return err
@@ -88,7 +88,7 @@ func (r *PostgresRepository) Save(e l.Entity, fields ...string) error {
 	return err
 }
 
-func GetFields(e l.Entity) ([]string, []reflect.Type, []string) {
+func GetFields(e libservice.Entity) ([]string, []reflect.Type, []string) {
 	t := e.Type()
 	fields := make([]string, t.NumField())
 	types := make([]reflect.Type, t.NumField())
@@ -102,30 +102,30 @@ func GetFields(e l.Entity) ([]string, []reflect.Type, []string) {
 			continue
 		}
 		fieldName := strcase.ToSnake(field.Name)
-		tag, ok := field.Tag.Lookup(l.StructTagName)
+		tag, ok := field.Tag.Lookup(libservice.StructTagName)
 		if !ok {
 			fieldName = tag
 		}
 		fields[i] = fieldName
 		types[i] = field.Type
-		sqlProperties[i] = field.Tag.Get(l.StructTagSQL)
+		sqlProperties[i] = field.Tag.Get(libservice.StructTagSQL)
 
 	}
 	return fields, types, sqlProperties
 }
 
-func (r *PostgresRepository) Update(i l.Entity, fields ...string) error {
+func (r *PostgresRepository) Update(i libservice.Entity, fields ...string) error {
 	panic("implement me")
 }
 
-func (r *PostgresRepository) Get(i uuid.UUID) (l.Entity, error) {
+func (r *PostgresRepository) Get(i uuid.UUID) (libservice.Entity, error) {
 	panic("implement me")
 }
 
-func (r *PostgresRepository) List() []l.Entity {
+func (r *PostgresRepository) List() []libservice.Entity {
 	panic("implement me")
 }
 
-func (r *PostgresRepository) Delete(i l.Entity) (bool, error) {
+func (r *PostgresRepository) Delete(i libservice.Entity) (bool, error) {
 	panic("implement me")
 }

@@ -1,4 +1,4 @@
-package libservice_template
+package libservice
 
 import (
 	"github.com/stretchr/testify/assert"

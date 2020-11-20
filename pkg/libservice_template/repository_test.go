@@ -1,1 +1,0 @@
-package libservice_template
