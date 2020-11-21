@@ -3,26 +3,15 @@ module service_templated
 go 1.14
 
 require (
-	github.com/4thel00z/libhttp v0.0.0-20201116005417-2f4b853fe689
+	github.com/4thel00z/libhttp v1.1.0
 	github.com/4thel00z/libservice v1.0.0
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/deckarep/golang-set v1.7.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/fortytw2/leaktest v1.3.0 // indirect
-	github.com/google/uuid v1.1.2 // indirect
-	github.com/iancoleman/strcase v0.1.2 // indirect
-	github.com/jmoiron/sqlx v1.2.0 // indirect
+	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
-	github.com/mitchellh/mapstructure v1.3.3 // indirect
-	github.com/monzo/typhon v0.0.0-20200505200851-d565f398c1c5
-	github.com/onsi/ginkgo v1.14.2 // indirect
-	github.com/onsi/gomega v1.10.3 // indirect
-	github.com/proullon/ramsql v0.0.0-20181213202341-817cee58a244 // indirect
-	github.com/stretchr/testify v1.6.1 // indirect
-	github.com/ziutek/mymysql v1.5.4 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
+	github.com/stretchr/objx v0.3.0 // indirect
+	golang.org/x/text v0.3.4 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/dealancer/validate.v2 v2.0.0-20191007140827-2f5082b2f7fa // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
