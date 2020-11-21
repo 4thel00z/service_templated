@@ -31,6 +31,9 @@ var (
 	configPath = flag.String("config", ".service_templatedrc.json", "path to config. [defaults to .service_templatedrc.json]")
 	debugFlag  = flag.Bool("debug", false, "enable replacement of <auth> with real token [defaults to false]")
 	verbose    = flag.Bool("verbose", false, "enable verbose logging [defaults to false]")
+	certFile   = flag.String("cert-file", "tls.cert", "<path-to-cert-file> [defaults to tls.cert]")
+	keyFile    = flag.String("key-file", "tls.key", "<path-to-key-file> [defaults to tls.key]")
+	tls        = flag.Bool("tls", false, "")
 )
 
 func main() {
@@ -58,7 +61,17 @@ func main() {
 		Filter(filters.MultipartValidation(app)).
 		Filter(filters.Auth(app))
 
-	srv, err := libhttp.Listen(svc, addr)
+	var (
+		srv *libhttp.Server
+	)
+
+	if *tls || *certFile != "tls.cert" && *keyFile != "tls.key" {
+		srv, err = libhttp.ListenTLS(svc, addr, *certFile, *keyFile, nil)
+
+	} else {
+		srv, err = libhttp.Listen(svc, addr)
+	}
+
 	if err != nil {
 		panic(err)
 	}
