@@ -3,8 +3,8 @@ module service_templated
 go 1.14
 
 require (
-	github.com/4thel00z/libhttp v1.1.0
-	github.com/4thel00z/libservice v1.0.0
+	github.com/4thel00z/libhttp v1.2.0
+	github.com/4thel00z/libservice v1.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/joho/godotenv v1.3.0
