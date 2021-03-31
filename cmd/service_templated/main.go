@@ -8,10 +8,10 @@ import (
 	"github.com/logrusorgru/aurora"
 
 	libservice "github.com/4thel00z/libservice/v1"
+	"github.com/4thel00z/libservice/v1/filters"
 	"log"
 	"os"
 	"os/signal"
-	"service_templated/pkg/libservice_template/filters"
 	"service_templated/pkg/libservice_template/modules/debug"
 	"strconv"
 	"syscall"
